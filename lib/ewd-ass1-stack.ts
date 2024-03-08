@@ -5,7 +5,8 @@ import * as custom from "aws-cdk-lib/custom-resources";
 import { generateBatch } from "../shared/utils";
 import { movieReviews } from '../seed/moviereviews';
 import * as apig from "aws-cdk-lib/aws-apigateway";
-
+import * as lambdanode from "aws-cdk-lib/aws-lambda-nodejs";
+import * as lambda from "aws-cdk-lib/aws-lambda";
 
 export class EwdAss1Stack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -37,6 +38,21 @@ export class EwdAss1Stack extends cdk.Stack {
         resources: [movieReviewsTable.tableArn],
       }),
     });
+    const getreviewbymovieId = new lambdanode.NodejsFunction(
+      this,
+      "GetReviewbyMovieId",
+      {
+        architecture: lambda.Architecture.ARM_64,
+        runtime: lambda.Runtime.NODEJS_16_X,
+        entry: `${__dirname}/../lambdas/getreviewbymovieId.ts`,
+        timeout: cdk.Duration.seconds(10),
+        memorySize: 128,
+        environment: {
+          TABLE_NAME: movieReviewsTable.tableName,
+          REGION: "eu-west-1",
+        },
+      }
+    );
      // REST API
      const api = new apig.RestApi(this, "RestAPI", {
       description: "MovieReview api",
@@ -50,5 +66,10 @@ export class EwdAss1Stack extends cdk.Stack {
         allowOrigins: ["*"],
       },
     });
+    const moviesEndpoint = api.root.addResource("movies");
+    moviesEndpoint.addMethod(
+      "GET",
+      new apig.LambdaIntegration(getreviewbymovieId, { proxy: true })
+    );
   }
 }
