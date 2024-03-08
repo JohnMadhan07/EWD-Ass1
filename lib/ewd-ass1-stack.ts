@@ -14,5 +14,9 @@ export class EwdAss1Stack extends cdk.Stack {
       removalPolicy: cdk.RemovalPolicy.DESTROY,
       tableName: "MovieReviews",
     });
+    movieReviewsTable.addLocalSecondaryIndex({
+      indexName: "reviewerIx",
+      sortKey: { name: "reviewerName", type: dynamodb.AttributeType.STRING },
+    });
   }
 }
