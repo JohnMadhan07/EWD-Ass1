@@ -1,5 +1,5 @@
 import { Review } from "../shared/types";
-const sampleReviews: Review[] = [
+export const movieReviews: Review[] = [
     {
         MovieId: 1,
         ReviewerName: "user1",
