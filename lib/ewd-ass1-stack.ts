@@ -1,7 +1,10 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
-// import * as sqs from 'aws-cdk-lib/aws-sqs';
+import * as custom from "aws-cdk-lib/custom-resources";
+import { generateBatch } from "../shared/utils";
+import { movieReviews } from '../seed/moviereviews';
+
 
 export class EwdAss1Stack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -16,7 +19,22 @@ export class EwdAss1Stack extends cdk.Stack {
     });
     movieReviewsTable.addLocalSecondaryIndex({
       indexName: "reviewerIx",
-      sortKey: { name: "reviewerName", type: dynamodb.AttributeType.STRING },
+      sortKey: { name: "ReviewerName", type: dynamodb.AttributeType.STRING },
+    });
+    new custom.AwsCustomResource(this, "moviereviewsddbInitData", {
+      onCreate: {
+        service: "DynamoDB",
+        action: "batchWriteItem",
+        parameters: {
+          RequestItems: {
+            [movieReviewsTable.tableName]: generateBatch(movieReviews)
+          },
+        },
+        physicalResourceId: custom.PhysicalResourceId.of("moviereviewsddbInitData"), //.of(Date.now().toString()),
+      },
+      policy: custom.AwsCustomResourcePolicy.fromSdkCalls({
+        resources: [movieReviewsTable.tableArn],
+      }),
     });
   }
 }
