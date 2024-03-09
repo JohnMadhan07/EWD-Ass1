@@ -14,7 +14,7 @@ export class EwdAss1Stack extends cdk.Stack {
 
     const movieReviewsTable = new dynamodb.Table(this, "MovieReviewsTable", {
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
-      partitionKey: { name: "id", type: dynamodb.AttributeType.NUMBER },
+      partitionKey: { name: "movieId", type: dynamodb.AttributeType.NUMBER },
       sortKey:{name:"ReviewDate", type:dynamodb.AttributeType.STRING},
       removalPolicy: cdk.RemovalPolicy.DESTROY,
       tableName: "MovieReviews",
@@ -23,21 +23,7 @@ export class EwdAss1Stack extends cdk.Stack {
       indexName: "reviewerIx",
       sortKey: { name: "ReviewerName", type: dynamodb.AttributeType.STRING },
     });
-    new custom.AwsCustomResource(this, "moviereviewsddbInitData", {
-      onCreate: {
-        service: "DynamoDB",
-        action: "batchWriteItem",
-        parameters: {
-          RequestItems: {
-            [movieReviewsTable.tableName]: generateBatch(movieReviews)
-          },
-        },
-        physicalResourceId: custom.PhysicalResourceId.of("moviereviewsddbInitData"), //.of(Date.now().toString()),
-      },
-      policy: custom.AwsCustomResourcePolicy.fromSdkCalls({
-        resources: [movieReviewsTable.tableArn],
-      }),
-    });
+  
     const getreviewbymovieId = new lambdanode.NodejsFunction(
       this,
       "GetReviewbyMovieId",
@@ -67,9 +53,28 @@ export class EwdAss1Stack extends cdk.Stack {
       },
     });
     const moviesEndpoint = api.root.addResource("movies");
-    moviesEndpoint.addMethod(
+    const movieIdEndpoint = moviesEndpoint.addResource("{movieId}");
+    const reviewsEndpoint =movieIdEndpoint.addResource("reviews")
+    reviewsEndpoint.addMethod(
       "GET",
       new apig.LambdaIntegration(getreviewbymovieId, { proxy: true })
     );
+    movieReviewsTable.grantReadData(getreviewbymovieId);
+
+    new custom.AwsCustomResource(this, "moviereviewsddbInitData", {
+      onCreate: {
+        service: "DynamoDB",
+        action: "batchWriteItem",
+        parameters: {
+          RequestItems: {
+            [movieReviewsTable.tableName]: generateBatch(movieReviews)
+          },
+        },
+        physicalResourceId: custom.PhysicalResourceId.of("moviereviewsddbInitData"), //.of(Date.now().toString()),
+      },
+      policy: custom.AwsCustomResourcePolicy.fromSdkCalls({
+        resources: [movieReviewsTable.tableArn],
+      }),
+    });
   }
 }
