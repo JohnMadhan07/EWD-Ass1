@@ -39,13 +39,13 @@ export class EwdAss1Stack extends cdk.Stack {
         },
       }
     );
-      const getReviewByReviewerNameForMovie = new lambdanode.NodejsFunction(
+      const getreviewbyreviewernameformovie = new lambdanode.NodejsFunction(
         this,
-        "GetReviewbyMovieId",
+        "getreviewbyreviewernameformovie",
         {
           architecture: lambda.Architecture.ARM_64,
           runtime: lambda.Runtime.NODEJS_16_X,
-          entry: `${__dirname}/../lambdas/getReviewByReviewerNameForMovie.ts`,
+          entry: `${__dirname}/../lambdas/getreviewbyreviewernameformovie.ts`,
           timeout: cdk.Duration.seconds(10),
           memorySize: 128,
           environment: {
@@ -74,12 +74,13 @@ export class EwdAss1Stack extends cdk.Stack {
       "GET",
       new apig.LambdaIntegration(getreviewbymovieId, { proxy: true })
     );
-    const reviewerEndpoint=reviewsEndpoint.addResource("{reviewerName}")
+    const reviewerEndpoint=reviewsEndpoint.addResource("{ReviewerName}")
     reviewerEndpoint.addMethod(
       "GET",
-      new apig.LambdaIntegration(getReviewByReviewerNameForMovie)
+      new apig.LambdaIntegration(getreviewbyreviewernameformovie)
     )
     movieReviewsTable.grantReadData(getreviewbymovieId);
+    movieReviewsTable.grantReadData(getreviewbyreviewernameformovie);
 
     new custom.AwsCustomResource(this, "moviereviewsddbInitData", {
       onCreate: {
