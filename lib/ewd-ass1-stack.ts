@@ -54,6 +54,21 @@ export class EwdAss1Stack extends cdk.Stack {
           },
         }
     );
+    const getreviewbyyearformovie = new lambdanode.NodejsFunction(
+      this,
+      "getreviewbyyearformovie",
+      {
+        architecture: lambda.Architecture.ARM_64,
+        runtime: lambda.Runtime.NODEJS_16_X,
+        entry: `${__dirname}/../lambdas/getreviewbyyearformovie.ts`,
+        timeout: cdk.Duration.seconds(10),
+        memorySize: 128,
+        environment: {
+          TABLE_NAME: movieReviewsTable.tableName,
+          REGION: "eu-west-1",
+        },
+      }
+  );
      // REST API
      const api = new apig.RestApi(this, "RestAPI", {
       description: "MovieReview api",
