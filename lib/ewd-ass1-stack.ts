@@ -23,7 +23,7 @@ export class EwdAss1Stack extends cdk.Stack {
       indexName: "reviewerIx",
       sortKey: { name: "ReviewerName", type: dynamodb.AttributeType.STRING },
     });
-    
+
     const getreviewbymovieId = new lambdanode.NodejsFunction(
       this,
       "GetReviewbyMovieId",
@@ -74,6 +74,11 @@ export class EwdAss1Stack extends cdk.Stack {
       "GET",
       new apig.LambdaIntegration(getreviewbymovieId, { proxy: true })
     );
+    const reviewerEndpoint=reviewsEndpoint.addResource("{reviewerName}")
+    reviewerEndpoint.addMethod(
+      "GET",
+      new apig.LambdaIntegration(getReviewByReviewerNameForMovie)
+    )
     movieReviewsTable.grantReadData(getreviewbymovieId);
 
     new custom.AwsCustomResource(this, "moviereviewsddbInitData", {
