@@ -23,7 +23,7 @@ export class EwdAss1Stack extends cdk.Stack {
       indexName: "reviewerIx",
       sortKey: { name: "ReviewerName", type: dynamodb.AttributeType.STRING },
     });
-  
+    
     const getreviewbymovieId = new lambdanode.NodejsFunction(
       this,
       "GetReviewbyMovieId",
@@ -38,6 +38,21 @@ export class EwdAss1Stack extends cdk.Stack {
           REGION: "eu-west-1",
         },
       }
+    );
+      const getReviewByReviewerNameForMovie = new lambdanode.NodejsFunction(
+        this,
+        "GetReviewbyMovieId",
+        {
+          architecture: lambda.Architecture.ARM_64,
+          runtime: lambda.Runtime.NODEJS_16_X,
+          entry: `${__dirname}/../lambdas/getReviewByReviewerNameForMovie.ts`,
+          timeout: cdk.Duration.seconds(10),
+          memorySize: 128,
+          environment: {
+            TABLE_NAME: movieReviewsTable.tableName,
+            REGION: "eu-west-1",
+          },
+        }
     );
      // REST API
      const api = new apig.RestApi(this, "RestAPI", {
