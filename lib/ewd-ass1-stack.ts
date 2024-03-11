@@ -109,7 +109,12 @@ export class EwdAss1Stack extends cdk.Stack {
       "GET",
       new apig.LambdaIntegration(getreviewbyreviewernameformovie)
     );
-    
+    const allreviewsEndpoint = api.root.addResource("reviews");
+    const allreviewsbyreviewerEndpoint= allreviewsEndpoint.addResource("{ReviewerName}")
+    allreviewsbyreviewerEndpoint.addMethod(
+      "GET",
+      new apig.LambdaIntegration(getallreviewsbyreviewer, { proxy: true })
+    );
     movieReviewsTable.grantReadData(getreviewbymovieId);
     movieReviewsTable.grantReadData(getreviewbyreviewernameformovie);
     movieReviewsTable.grantReadData(getallreviewsbyreviewer);
