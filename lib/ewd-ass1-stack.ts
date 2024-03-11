@@ -23,6 +23,10 @@ export class EwdAss1Stack extends cdk.Stack {
       indexName: "reviewerIx",
       sortKey: { name: "ReviewerName", type: dynamodb.AttributeType.STRING },
     });
+    movieReviewsTable.addGlobalSecondaryIndex({
+      indexName:"reviewsIx",
+      partitionKey:{name:"ReviewerName", type: dynamodb.AttributeType.STRING}
+    });
     const getreviewbymovieId = new lambdanode.NodejsFunction(
       this,
       "GetReviewbyMovieId",
