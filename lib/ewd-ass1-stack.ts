@@ -1,9 +1,9 @@
-import * as cdk from 'aws-cdk-lib';
-import { Construct } from 'constructs';
+import * as cdk from "aws-cdk-lib";
+import { Construct } from "constructs";
 import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 import * as custom from "aws-cdk-lib/custom-resources";
 import { generateBatch } from "../shared/utils";
-import { movieReviews } from '../seed/moviereviews';
+import { movieReviews } from "../seed/moviereviews";
 import * as apig from "aws-cdk-lib/aws-apigateway";
 import * as lambdanode from "aws-cdk-lib/aws-lambda-nodejs";
 import * as lambda from "aws-cdk-lib/aws-lambda";
@@ -15,7 +15,7 @@ export class EwdAss1Stack extends cdk.Stack {
     const movieReviewsTable = new dynamodb.Table(this, "MovieReviewsTable", {
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       partitionKey: { name: "movieId", type: dynamodb.AttributeType.NUMBER },
-      sortKey:{name:"ReviewDate", type:dynamodb.AttributeType.STRING},
+      sortKey: { name: "ReviewDate", type: dynamodb.AttributeType.STRING },
       removalPolicy: cdk.RemovalPolicy.DESTROY,
       tableName: "MovieReviews",
     });
@@ -23,7 +23,6 @@ export class EwdAss1Stack extends cdk.Stack {
       indexName: "reviewerIx",
       sortKey: { name: "ReviewerName", type: dynamodb.AttributeType.STRING },
     });
-
     const getreviewbymovieId = new lambdanode.NodejsFunction(
       this,
       "GetReviewbyMovieId",
@@ -39,28 +38,13 @@ export class EwdAss1Stack extends cdk.Stack {
         },
       }
     );
-      const getreviewbyreviewernameformovie = new lambdanode.NodejsFunction(
-        this,
-        "getreviewbyreviewernameformovie",
-        {
-          architecture: lambda.Architecture.ARM_64,
-          runtime: lambda.Runtime.NODEJS_16_X,
-          entry: `${__dirname}/../lambdas/getreviewbyreviewernameformovie.ts`,
-          timeout: cdk.Duration.seconds(10),
-          memorySize: 128,
-          environment: {
-            TABLE_NAME: movieReviewsTable.tableName,
-            REGION: "eu-west-1",
-          },
-        }
-    );
-    const getreviewbyyearformovie = new lambdanode.NodejsFunction(
+    const getreviewbyreviewernameformovie = new lambdanode.NodejsFunction(
       this,
-      "getreviewbyyearformovie",
+      "getreviewbyreviewernameformovie",
       {
         architecture: lambda.Architecture.ARM_64,
         runtime: lambda.Runtime.NODEJS_16_X,
-        entry: `${__dirname}/../lambdas/getreviewbyyearformovie.ts`,
+        entry: `${__dirname}/../lambdas/getreviewbyreviewernameformovie.ts`,
         timeout: cdk.Duration.seconds(10),
         memorySize: 128,
         environment: {
@@ -68,9 +52,39 @@ export class EwdAss1Stack extends cdk.Stack {
           REGION: "eu-west-1",
         },
       }
-  );
-     // REST API
-     const api = new apig.RestApi(this, "RestAPI", {
+    );
+    const getallreviewsbyreviewer = new lambdanode.NodejsFunction(
+      this,
+      "getallreviewsbyreviewer",
+      {
+        architecture: lambda.Architecture.ARM_64,
+        runtime: lambda.Runtime.NODEJS_16_X,
+        entry: `${__dirname}/../lambdas/getallreviewsbyreviewer.ts`,
+        timeout: cdk.Duration.seconds(10),
+        memorySize: 128,
+        environment: {
+          TABLE_NAME: movieReviewsTable.tableName,
+          REGION: "eu-west-1",
+        },
+      }
+    );
+    // const getreviewbyyearformovie = new lambdanode.NodejsFunction(
+    //   this,
+    //   "getreviewbyyearformovie",
+    //   {
+    //     architecture: lambda.Architecture.ARM_64,
+    //     runtime: lambda.Runtime.NODEJS_16_X,
+    //     entry: `${__dirname}/../lambdas/getreviewbyyearformovie.ts`,
+    //     timeout: cdk.Duration.seconds(10),
+    //     memorySize: 128,
+    //     environment: {
+    //       TABLE_NAME: movieReviewsTable.tableName,
+    //       REGION: "eu-west-1",
+    //     },
+    //   }
+    // );
+    // REST API
+    const api = new apig.RestApi(this, "RestAPI", {
       description: "MovieReview api",
       deployOptions: {
         stageName: "dev",
@@ -84,18 +98,21 @@ export class EwdAss1Stack extends cdk.Stack {
     });
     const moviesEndpoint = api.root.addResource("movies");
     const movieIdEndpoint = moviesEndpoint.addResource("{movieId}");
-    const reviewsEndpoint =movieIdEndpoint.addResource("reviews")
+    
+    const reviewsEndpoint = movieIdEndpoint.addResource("reviews");
     reviewsEndpoint.addMethod(
       "GET",
       new apig.LambdaIntegration(getreviewbymovieId, { proxy: true })
     );
-    const reviewerEndpoint=reviewsEndpoint.addResource("{ReviewerName}")
+    const reviewerEndpoint = reviewsEndpoint.addResource("{ReviewerName}");
     reviewerEndpoint.addMethod(
       "GET",
       new apig.LambdaIntegration(getreviewbyreviewernameformovie)
-    )
+    );
+    
     movieReviewsTable.grantReadData(getreviewbymovieId);
     movieReviewsTable.grantReadData(getreviewbyreviewernameformovie);
+    movieReviewsTable.grantReadData(getallreviewsbyreviewer);
 
     new custom.AwsCustomResource(this, "moviereviewsddbInitData", {
       onCreate: {
@@ -103,10 +120,12 @@ export class EwdAss1Stack extends cdk.Stack {
         action: "batchWriteItem",
         parameters: {
           RequestItems: {
-            [movieReviewsTable.tableName]: generateBatch(movieReviews)
+            [movieReviewsTable.tableName]: generateBatch(movieReviews),
           },
         },
-        physicalResourceId: custom.PhysicalResourceId.of("moviereviewsddbInitData"), //.of(Date.now().toString()),
+        physicalResourceId: custom.PhysicalResourceId.of(
+          "moviereviewsddbInitData"
+        ), //.of(Date.now().toString()),
       },
       policy: custom.AwsCustomResourcePolicy.fromSdkCalls({
         resources: [movieReviewsTable.tableArn],
