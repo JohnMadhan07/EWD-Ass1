@@ -7,10 +7,11 @@ export const handler: APIGatewayProxyHandlerV2 = async (event, context) => {
     try {
       console.log("Event: ", event);
       const parameters = event?.pathParameters;
+      const queryparams= event?.queryStringParameters;
       const movieId = parameters?.movieId
         ? parseInt(parameters.movieId)
         : undefined;
-
+        const minRating = queryparams?.minRating ? parseInt(queryparams.minRating) : undefined;
         if (!movieId) {
             return {
               statusCode: 404,
@@ -30,6 +31,11 @@ export const handler: APIGatewayProxyHandlerV2 = async (event, context) => {
               ":m": movieId,
             },
           };
+          if (minRating !== undefined) {
+            commandInput.FilterExpression = "#Rating >= :minRating";
+            commandInput.ExpressionAttributeNames = { "#Rating": "Rating" };
+            commandInput.ExpressionAttributeValues![":minRating"] = minRating;
+        }
           const commandOutput = await ddbDocClient.send(
             new QueryCommand(commandInput)
             );

@@ -31,7 +31,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event, context) => {
             new QueryCommand(commandInput)
             );
    const body = {
-    data: commandOutput
+    data: commandOutput.Items
    }
     return {
         statusCode: 200,
