@@ -108,7 +108,7 @@ export class EwdAss1Stack extends cdk.Stack {
       "GET",
       new apig.LambdaIntegration(getreviewbymovieId, { proxy: true })
     );
-    const reviewerEndpoint = reviewsEndpoint.addResource("{ReviewerName}");
+    const reviewerEndpoint = reviewsEndpoint.addResource("{Parameter}");
     reviewerEndpoint.addMethod(
       "GET",
       new apig.LambdaIntegration(getreviewbyreviewernameformovie)

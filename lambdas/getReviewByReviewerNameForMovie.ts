@@ -7,30 +7,23 @@ export const handler: APIGatewayProxyHandlerV2 = async (event, context) => {
     try {
         console.log("Event: ", event);
         const parameters = event?.pathParameters;
-        const movieId = parameters?.movieId ? parseInt(parameters.movieId) : undefined;
-        const reviewerName = parameters?.ReviewerName;
 
-        if (!movieId || !reviewerName) {
+        const movieId = parameters?.movieId ? parseInt(parameters.movieId) : undefined;
+        const yearorReviewer = parameters?.Parameter;
+
+        if (!movieId && !yearorReviewer) {
             return {
               statusCode: 404,
               headers: {
                 "content-type": "application/json",
               },
-              body: JSON.stringify({ Message: "Missing movie Id or ReviewerName" }),
+              body: JSON.stringify({ Message: "Missing movie Id or parameter" }),
             };
           }
           let commandInput: QueryCommandInput = {
             TableName: process.env.TABLE_NAME,
           };
-          commandInput = {
-            ...commandInput,
-            IndexName: "reviewerIx",
-            KeyConditionExpression: "movieId = :m and begins_with(ReviewerName, :r) ",
-            ExpressionAttributeValues: {
-              ":m": movieId,
-              ":r": reviewerName,
-            },
-          };
+         
           const commandOutput = await ddbDocClient.send(
             new QueryCommand(commandInput)
             );
