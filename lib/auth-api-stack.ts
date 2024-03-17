@@ -9,6 +9,7 @@ import * as apig from "aws-cdk-lib/aws-apigateway";
 
 export class AuthAppStack extends cdk.Stack {
   private userPoolId: string;
+  private userPoolClientId: string;
 
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
@@ -20,5 +21,11 @@ export class AuthAppStack extends cdk.Stack {
     });
 
     this.userPoolId = userPool.userPoolId;
+
+    const appClient = userPool.addClient("AppClient", {
+      authFlows: { userPassword: true },
+    });
+
+    this.userPoolClientId = appClient.userPoolClientId;
   }
 }
