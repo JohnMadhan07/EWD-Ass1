@@ -8,6 +8,7 @@ import * as apig from "aws-cdk-lib/aws-apigateway";
 // import * as node from "aws-cdk-lib/aws-lambda-nodejs";
 
 export class AuthAppStack extends cdk.Stack {
+  private auth: apig.IResource;
   private userPoolId: string;
   private userPoolClientId: string;
 
@@ -27,5 +28,15 @@ export class AuthAppStack extends cdk.Stack {
     });
 
     this.userPoolClientId = appClient.userPoolClientId;
+
+    const authApi = new apig.RestApi(this, "AuthServiceApi", {
+      description: "Authentication Service RestApi",
+      endpointTypes: [apig.EndpointType.REGIONAL],
+      defaultCorsPreflightOptions: {
+        allowOrigins: apig.Cors.ALL_ORIGINS,
+      },
+    });
+
+    this.auth = authApi.root.addResource("auth");
   }
 }
