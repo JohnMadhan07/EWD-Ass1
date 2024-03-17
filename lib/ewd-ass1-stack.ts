@@ -24,69 +24,48 @@ export class EwdAss1Stack extends cdk.Stack {
       sortKey: { name: "ReviewerName", type: dynamodb.AttributeType.STRING },
     });
     movieReviewsTable.addGlobalSecondaryIndex({
-      indexName:"reviewsIx",
-      partitionKey:{name:"ReviewerName", type: dynamodb.AttributeType.STRING}
+      indexName: "reviewsIx",
+      partitionKey: {
+        name: "ReviewerName",
+        type: dynamodb.AttributeType.STRING,
+      },
     });
+    const appCommonFnProps = {
+      architecture: lambda.Architecture.ARM_64,
+      timeout: cdk.Duration.seconds(10),
+      memorySize: 128,
+      runtime: lambda.Runtime.NODEJS_18_X,
+      handler: "handler",
+      environment: {
+        TABLE_NAME: movieReviewsTable.tableName,
+        REGION: "eu-west-1",
+      },
+    };
     const getreviewbymovieId = new lambdanode.NodejsFunction(
       this,
       "GetReviewbyMovieId",
       {
-        architecture: lambda.Architecture.ARM_64,
-        runtime: lambda.Runtime.NODEJS_16_X,
-        entry: `${__dirname}/../lambdas/getreviewbymovieId.ts`,
-        timeout: cdk.Duration.seconds(10),
-        memorySize: 128,
-        environment: {
-          TABLE_NAME: movieReviewsTable.tableName,
-          REGION: "eu-west-1",
-        },
+        ...appCommonFnProps,
+        entry: `${__dirname}/../lambdas/getreviewbymovieId.ts`,      
       }
     );
     const getreviewbyreviewernameformovie = new lambdanode.NodejsFunction(
       this,
       "getreviewbyreviewernameformovie",
       {
-        architecture: lambda.Architecture.ARM_64,
-        runtime: lambda.Runtime.NODEJS_16_X,
-        entry: `${__dirname}/../lambdas/getreviewbyreviewernameformovie.ts`,
-        timeout: cdk.Duration.seconds(10),
-        memorySize: 128,
-        environment: {
-          TABLE_NAME: movieReviewsTable.tableName,
-          REGION: "eu-west-1",
-        },
+        ...appCommonFnProps,
+        entry: `${__dirname}/../lambdas/getreviewbyreviewernameformovie.ts`,       
       }
     );
     const getallreviewsbyreviewer = new lambdanode.NodejsFunction(
       this,
       "getallreviewsbyreviewer",
       {
-        architecture: lambda.Architecture.ARM_64,
-        runtime: lambda.Runtime.NODEJS_16_X,
+        ...appCommonFnProps,
         entry: `${__dirname}/../lambdas/getallreviewsbyreviewer.ts`,
-        timeout: cdk.Duration.seconds(10),
-        memorySize: 128,
-        environment: {
-          TABLE_NAME: movieReviewsTable.tableName,
-          REGION: "eu-west-1",
-        },
       }
     );
-    // const getreviewbyyearformovie = new lambdanode.NodejsFunction(
-    //   this,
-    //   "getreviewbyyearformovie",
-    //   {
-    //     architecture: lambda.Architecture.ARM_64,
-    //     runtime: lambda.Runtime.NODEJS_16_X,
-    //     entry: `${__dirname}/../lambdas/getreviewbyyearformovie.ts`,
-    //     timeout: cdk.Duration.seconds(10),
-    //     memorySize: 128,
-    //     environment: {
-    //       TABLE_NAME: movieReviewsTable.tableName,
-    //       REGION: "eu-west-1",
-    //     },
-    //   }
-    // );
+
     // REST API
     const api = new apig.RestApi(this, "RestAPI", {
       description: "MovieReview api",
@@ -102,7 +81,7 @@ export class EwdAss1Stack extends cdk.Stack {
     });
     const moviesEndpoint = api.root.addResource("movies");
     const movieIdEndpoint = moviesEndpoint.addResource("{movieId}");
-    
+
     const reviewsEndpoint = movieIdEndpoint.addResource("reviews");
     reviewsEndpoint.addMethod(
       "GET",
@@ -114,7 +93,8 @@ export class EwdAss1Stack extends cdk.Stack {
       new apig.LambdaIntegration(getreviewbyreviewernameformovie)
     );
     const allreviewsEndpoint = api.root.addResource("reviews");
-    const allreviewsbyreviewerEndpoint= allreviewsEndpoint.addResource("{ReviewerName}")
+    const allreviewsbyreviewerEndpoint =
+      allreviewsEndpoint.addResource("{ReviewerName}");
     allreviewsbyreviewerEndpoint.addMethod(
       "GET",
       new apig.LambdaIntegration(getallreviewsbyreviewer, { proxy: true })
@@ -134,7 +114,7 @@ export class EwdAss1Stack extends cdk.Stack {
         },
         physicalResourceId: custom.PhysicalResourceId.of(
           "moviereviewsddbInitData"
-        ), //.of(Date.now().toString()),
+        ),
       },
       policy: custom.AwsCustomResourcePolicy.fromSdkCalls({
         resources: [movieReviewsTable.tableArn],
