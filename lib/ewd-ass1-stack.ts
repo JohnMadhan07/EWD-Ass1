@@ -111,6 +111,10 @@ export class EwdAss1Stack extends cdk.Stack {
       "GET",
       new apig.LambdaIntegration(getreviewbyreviewernameformovie)
     );
+    reviewerEndpoint.addMethod(
+      "PUT",
+      new apig.LambdaIntegration(updatemoviereview)
+    );
     const allreviewsEndpoint = api.root.addResource("reviews");
     const allreviewsbyreviewerEndpoint =
       allreviewsEndpoint.addResource("{ReviewerName}");
@@ -122,6 +126,7 @@ export class EwdAss1Stack extends cdk.Stack {
     movieReviewsTable.grantReadData(getreviewbyreviewernameformovie);
     movieReviewsTable.grantReadData(getallreviewsbyreviewer);
     movieReviewsTable.grantReadWriteData(addmoviereview);
+    movieReviewsTable.grantReadWriteData(updatemoviereview);
 
     new custom.AwsCustomResource(this, "moviereviewsddbInitData", {
       onCreate: {
