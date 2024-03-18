@@ -113,7 +113,7 @@ export class EwdAss1Stack extends cdk.Stack {
     movieReviewsTable.grantReadData(getreviewbymovieId);
     movieReviewsTable.grantReadData(getreviewbyreviewernameformovie);
     movieReviewsTable.grantReadData(getallreviewsbyreviewer);
-    movieReviewsTable.grantReadWriteData(getallreviewsbyreviewer);
+    movieReviewsTable.grantReadWriteData(addmoviereview);
 
     new custom.AwsCustomResource(this, "moviereviewsddbInitData", {
       onCreate: {
