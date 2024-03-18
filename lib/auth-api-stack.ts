@@ -39,6 +39,12 @@ export class AuthAppStack extends cdk.Stack {
 
     this.auth = authApi.root.addResource("auth");
     this.addAuthRoute("signup", "POST", "SignupFn", "signup.ts");
+    this.addAuthRoute(
+      "confirm_signup",
+      "POST",
+      "ConfirmFn",
+      "confirm-signup.ts"
+    );
   }
   private addAuthRoute(
     resourceName: string,
@@ -64,7 +70,7 @@ export class AuthAppStack extends cdk.Stack {
 
     const fn = new node.NodejsFunction(this, fnName, {
       ...commonFnProps,
-      entry: `${__dirname}/../lambda/auth/${fnEntry}`,
+      entry: `${__dirname}/../lambdas/auth/${fnEntry}`,
     });
 
     resource.addMethod(method, new apig.LambdaIntegration(fn));
