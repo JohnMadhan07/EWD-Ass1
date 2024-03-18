@@ -73,6 +73,14 @@ export class EwdAss1Stack extends cdk.Stack {
         entry: `${__dirname}/../lambdas/addmoviereview.ts`,
       }
     );
+    const updatemoviereview = new lambdanode.NodejsFunction(
+      this,
+      "updatemoviereview",
+      {
+        ...appCommonFnProps,
+        entry: `${__dirname}/../lambdas/updatemoviereview.ts`,
+      }
+    );
     // REST API
     const api = new apig.RestApi(this, "RestAPI", {
       description: "MovieReview api",
