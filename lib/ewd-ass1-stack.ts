@@ -65,7 +65,14 @@ export class EwdAss1Stack extends cdk.Stack {
         entry: `${__dirname}/../lambdas/getallreviewsbyreviewer.ts`,
       }
     );
-
+    const addmoviereview = new lambdanode.NodejsFunction(
+      this,
+      "addmoviereview",
+      {
+        ...appCommonFnProps,
+        entry: `${__dirname}/../lambdas/addmoviereview.ts`,
+      }
+    );
     // REST API
     const api = new apig.RestApi(this, "RestAPI", {
       description: "MovieReview api",
@@ -83,6 +90,10 @@ export class EwdAss1Stack extends cdk.Stack {
     const movieIdEndpoint = moviesEndpoint.addResource("{movieId}");
 
     const reviewsEndpoint = movieIdEndpoint.addResource("reviews");
+    moviesEndpoint.addMethod(
+      "POST",
+      new apig.LambdaIntegration(addmoviereview, { proxy: true })
+    );
     reviewsEndpoint.addMethod(
       "GET",
       new apig.LambdaIntegration(getreviewbymovieId, { proxy: true })
@@ -102,6 +113,7 @@ export class EwdAss1Stack extends cdk.Stack {
     movieReviewsTable.grantReadData(getreviewbymovieId);
     movieReviewsTable.grantReadData(getreviewbyreviewernameformovie);
     movieReviewsTable.grantReadData(getallreviewsbyreviewer);
+    movieReviewsTable.grantReadWriteData(getallreviewsbyreviewer);
 
     new custom.AwsCustomResource(this, "moviereviewsddbInitData", {
       onCreate: {
