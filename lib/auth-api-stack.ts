@@ -46,6 +46,7 @@ export class AuthAppStack extends cdk.Stack {
       "confirm-signup.ts"
     );
     this.addAuthRoute("signin", "POST", "SigninFn", "signin.ts");
+    this.addAuthRoute('signout', 'GET', 'SignoutFn', 'signout.ts');
   }
   private addAuthRoute(
     resourceName: string,
