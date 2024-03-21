@@ -7,7 +7,7 @@ import { movieReviews } from "../seed/moviereviews";
 import * as apig from "aws-cdk-lib/aws-apigateway";
 import * as lambdanode from "aws-cdk-lib/aws-lambda-nodejs";
 import * as lambda from "aws-cdk-lib/aws-lambda";
-import * as iam from 'aws-cdk-lib/aws-iam';
+import * as iam from "aws-cdk-lib/aws-iam";
 
 export class EwdAss1Stack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -131,7 +131,13 @@ export class EwdAss1Stack extends cdk.Stack {
       "GET",
       new apig.LambdaIntegration(getallreviewsbyreviewer, { proxy: true })
     );
-  
+    const translate = allreviewsbyreviewerEndpoint.addResource("{movieId}");
+    const translatedreviewEndpoint = translate.addResource("translation");
+    translatedreviewEndpoint.addMethod(
+      "GET",
+      new apig.LambdaIntegration(gettranslatedreview)
+    );
+
     movieReviewsTable.grantReadData(getreviewbymovieId);
     movieReviewsTable.grantReadData(getreviewbyreviewernameformovie);
     movieReviewsTable.grantReadData(getallreviewsbyreviewer);
