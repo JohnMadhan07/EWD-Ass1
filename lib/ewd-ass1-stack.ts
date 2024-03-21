@@ -7,6 +7,7 @@ import { movieReviews } from "../seed/moviereviews";
 import * as apig from "aws-cdk-lib/aws-apigateway";
 import * as lambdanode from "aws-cdk-lib/aws-lambda-nodejs";
 import * as lambda from "aws-cdk-lib/aws-lambda";
+import * as iam from 'aws-cdk-lib/aws-iam';
 
 export class EwdAss1Stack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -46,7 +47,7 @@ export class EwdAss1Stack extends cdk.Stack {
       "GetReviewbyMovieId",
       {
         ...appCommonFnProps,
-        entry: `${__dirname}/../lambdas/getreviewbymovieId.ts`,      
+        entry: `${__dirname}/../lambdas/getreviewbymovieId.ts`,
       }
     );
     const getreviewbyreviewernameformovie = new lambdanode.NodejsFunction(
@@ -54,7 +55,7 @@ export class EwdAss1Stack extends cdk.Stack {
       "getreviewbyreviewernameformovie",
       {
         ...appCommonFnProps,
-        entry: `${__dirname}/../lambdas/getreviewbyreviewernameformovie.ts`,       
+        entry: `${__dirname}/../lambdas/getreviewbyreviewernameformovie.ts`,
       }
     );
     const getallreviewsbyreviewer = new lambdanode.NodejsFunction(
@@ -79,6 +80,14 @@ export class EwdAss1Stack extends cdk.Stack {
       {
         ...appCommonFnProps,
         entry: `${__dirname}/../lambdas/updatemoviereview.ts`,
+      }
+    );
+    const gettranslatedreview = new lambdanode.NodejsFunction(
+      this,
+      "gettranslatedreview",
+      {
+        ...appCommonFnProps,
+        entry: `${__dirname}/../lambdas/gettranslatedreview.ts`,
       }
     );
     // REST API
@@ -122,11 +131,13 @@ export class EwdAss1Stack extends cdk.Stack {
       "GET",
       new apig.LambdaIntegration(getallreviewsbyreviewer, { proxy: true })
     );
+  
     movieReviewsTable.grantReadData(getreviewbymovieId);
     movieReviewsTable.grantReadData(getreviewbyreviewernameformovie);
     movieReviewsTable.grantReadData(getallreviewsbyreviewer);
     movieReviewsTable.grantReadWriteData(addmoviereview);
     movieReviewsTable.grantReadWriteData(updatemoviereview);
+    movieReviewsTable.grantReadData(gettranslatedreview);
 
     new custom.AwsCustomResource(this, "moviereviewsddbInitData", {
       onCreate: {
