@@ -90,6 +90,10 @@ export class EwdAss1Stack extends cdk.Stack {
         entry: `${__dirname}/../lambdas/gettranslatedreview.ts`,
       }
     );
+    gettranslatedreview.addToRolePolicy(new iam.PolicyStatement({
+      actions: ['translate:TranslateText'],
+      resources: ['*'],
+    }));
     // REST API
     const api = new apig.RestApi(this, "RestAPI", {
       description: "MovieReview api",
