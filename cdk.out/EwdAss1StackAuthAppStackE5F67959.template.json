@@ -37,7 +37,7 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "AuthAppStack/UserPool/Resource"
+    "aws:cdk:path": "EwdAss1Stack/AuthAppStack/UserPool/Resource"
    }
   },
   "UserPoolAppClientDD0407EC": {
@@ -70,7 +70,7 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "AuthAppStack/UserPool/AppClient/Resource"
+    "aws:cdk:path": "EwdAss1Stack/AuthAppStack/UserPool/AppClient/Resource"
    }
   },
   "AuthServiceApi8CFB7A21": {
@@ -85,10 +85,10 @@
     "Name": "AuthServiceApi"
    },
    "Metadata": {
-    "aws:cdk:path": "AuthAppStack/AuthServiceApi/Resource"
+    "aws:cdk:path": "EwdAss1Stack/AuthAppStack/AuthServiceApi/Resource"
    }
   },
-  "AuthServiceApiDeployment2EA5C0283c88500d7e4a0ed8b194b430018c80e1": {
+  "AuthServiceApiDeployment2EA5C028b6459064ebe49e90b09bf847e970a2c7": {
    "Type": "AWS::ApiGateway::Deployment",
    "Properties": {
     "Description": "Authentication Service RestApi",
@@ -114,14 +114,14 @@
     "AuthServiceApiOPTIONS9323A1DA"
    ],
    "Metadata": {
-    "aws:cdk:path": "AuthAppStack/AuthServiceApi/Deployment/Resource"
+    "aws:cdk:path": "EwdAss1Stack/AuthAppStack/AuthServiceApi/Deployment/Resource"
    }
   },
   "AuthServiceApiDeploymentStageprodAE29D77D": {
    "Type": "AWS::ApiGateway::Stage",
    "Properties": {
     "DeploymentId": {
-     "Ref": "AuthServiceApiDeployment2EA5C0283c88500d7e4a0ed8b194b430018c80e1"
+     "Ref": "AuthServiceApiDeployment2EA5C028b6459064ebe49e90b09bf847e970a2c7"
     },
     "RestApiId": {
      "Ref": "AuthServiceApi8CFB7A21"
@@ -129,7 +129,7 @@
     "StageName": "prod"
    },
    "Metadata": {
-    "aws:cdk:path": "AuthAppStack/AuthServiceApi/DeploymentStage.prod/Resource"
+    "aws:cdk:path": "EwdAss1Stack/AuthAppStack/AuthServiceApi/DeploymentStage.prod/Resource"
    }
   },
   "AuthServiceApiOPTIONS9323A1DA": {
@@ -175,7 +175,7 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "AuthAppStack/AuthServiceApi/Default/OPTIONS/Resource"
+    "aws:cdk:path": "EwdAss1Stack/AuthAppStack/AuthServiceApi/Default/OPTIONS/Resource"
    }
   },
   "AuthServiceApiauthF0516E48": {
@@ -193,7 +193,7 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "AuthAppStack/AuthServiceApi/Default/auth/Resource"
+    "aws:cdk:path": "EwdAss1Stack/AuthAppStack/AuthServiceApi/Default/auth/Resource"
    }
   },
   "AuthServiceApiauthOPTIONS8DFC6C71": {
@@ -236,7 +236,7 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "AuthAppStack/AuthServiceApi/Default/auth/OPTIONS/Resource"
+    "aws:cdk:path": "EwdAss1Stack/AuthAppStack/AuthServiceApi/Default/auth/OPTIONS/Resource"
    }
   },
   "AuthServiceApiauthsignup28B7741A": {
@@ -251,7 +251,7 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "AuthAppStack/AuthServiceApi/Default/auth/signup/Resource"
+    "aws:cdk:path": "EwdAss1Stack/AuthAppStack/AuthServiceApi/Default/auth/signup/Resource"
    }
   },
   "AuthServiceApiauthsignupOPTIONS8DCE3F66": {
@@ -294,10 +294,10 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "AuthAppStack/AuthServiceApi/Default/auth/signup/OPTIONS/Resource"
+    "aws:cdk:path": "EwdAss1Stack/AuthAppStack/AuthServiceApi/Default/auth/signup/OPTIONS/Resource"
    }
   },
-  "AuthServiceApiauthsignupPOSTApiPermissionAuthAppStackAuthServiceApi9287C2C0POSTauthsignupD0F0B2E7": {
+  "AuthServiceApiauthsignupPOSTApiPermissionEwdAss1StackAuthAppStackAuthServiceApi2A3333BFPOSTauthsignupE6B85AA6": {
    "Type": "AWS::Lambda::Permission",
    "Properties": {
     "Action": "lambda:InvokeFunction",
@@ -338,10 +338,10 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "AuthAppStack/AuthServiceApi/Default/auth/signup/POST/ApiPermission.AuthAppStackAuthServiceApi9287C2C0.POST..auth.signup"
+    "aws:cdk:path": "EwdAss1Stack/AuthAppStack/AuthServiceApi/Default/auth/signup/POST/ApiPermission.EwdAss1StackAuthAppStackAuthServiceApi2A3333BF.POST..auth.signup"
    }
   },
-  "AuthServiceApiauthsignupPOSTApiPermissionTestAuthAppStackAuthServiceApi9287C2C0POSTauthsignupA2C4A050": {
+  "AuthServiceApiauthsignupPOSTApiPermissionTestEwdAss1StackAuthAppStackAuthServiceApi2A3333BFPOSTauthsignup80EE839D": {
    "Type": "AWS::Lambda::Permission",
    "Properties": {
     "Action": "lambda:InvokeFunction",
@@ -378,7 +378,7 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "AuthAppStack/AuthServiceApi/Default/auth/signup/POST/ApiPermission.Test.AuthAppStackAuthServiceApi9287C2C0.POST..auth.signup"
+    "aws:cdk:path": "EwdAss1Stack/AuthAppStack/AuthServiceApi/Default/auth/signup/POST/ApiPermission.Test.EwdAss1StackAuthAppStackAuthServiceApi2A3333BF.POST..auth.signup"
    }
   },
   "AuthServiceApiauthsignupPOST1848032B": {
@@ -421,7 +421,7 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "AuthAppStack/AuthServiceApi/Default/auth/signup/POST/Resource"
+    "aws:cdk:path": "EwdAss1Stack/AuthAppStack/AuthServiceApi/Default/auth/signup/POST/Resource"
    }
   },
   "AuthServiceApiauthconfirmsignup537C53E9": {
@@ -436,7 +436,7 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "AuthAppStack/AuthServiceApi/Default/auth/confirm_signup/Resource"
+    "aws:cdk:path": "EwdAss1Stack/AuthAppStack/AuthServiceApi/Default/auth/confirm_signup/Resource"
    }
   },
   "AuthServiceApiauthconfirmsignupOPTIONS65756E9E": {
@@ -479,10 +479,10 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "AuthAppStack/AuthServiceApi/Default/auth/confirm_signup/OPTIONS/Resource"
+    "aws:cdk:path": "EwdAss1Stack/AuthAppStack/AuthServiceApi/Default/auth/confirm_signup/OPTIONS/Resource"
    }
   },
-  "AuthServiceApiauthconfirmsignupPOSTApiPermissionAuthAppStackAuthServiceApi9287C2C0POSTauthconfirmsignup19A0EA5B": {
+  "AuthServiceApiauthconfirmsignupPOSTApiPermissionEwdAss1StackAuthAppStackAuthServiceApi2A3333BFPOSTauthconfirmsignup5D048942": {
    "Type": "AWS::Lambda::Permission",
    "Properties": {
     "Action": "lambda:InvokeFunction",
@@ -523,10 +523,10 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "AuthAppStack/AuthServiceApi/Default/auth/confirm_signup/POST/ApiPermission.AuthAppStackAuthServiceApi9287C2C0.POST..auth.confirm_signup"
+    "aws:cdk:path": "EwdAss1Stack/AuthAppStack/AuthServiceApi/Default/auth/confirm_signup/POST/ApiPermission.EwdAss1StackAuthAppStackAuthServiceApi2A3333BF.POST..auth.confirm_signup"
    }
   },
-  "AuthServiceApiauthconfirmsignupPOSTApiPermissionTestAuthAppStackAuthServiceApi9287C2C0POSTauthconfirmsignupCB171EDB": {
+  "AuthServiceApiauthconfirmsignupPOSTApiPermissionTestEwdAss1StackAuthAppStackAuthServiceApi2A3333BFPOSTauthconfirmsignupD29D61BE": {
    "Type": "AWS::Lambda::Permission",
    "Properties": {
     "Action": "lambda:InvokeFunction",
@@ -563,7 +563,7 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "AuthAppStack/AuthServiceApi/Default/auth/confirm_signup/POST/ApiPermission.Test.AuthAppStackAuthServiceApi9287C2C0.POST..auth.confirm_signup"
+    "aws:cdk:path": "EwdAss1Stack/AuthAppStack/AuthServiceApi/Default/auth/confirm_signup/POST/ApiPermission.Test.EwdAss1StackAuthAppStackAuthServiceApi2A3333BF.POST..auth.confirm_signup"
    }
   },
   "AuthServiceApiauthconfirmsignupPOST5F235FEF": {
@@ -606,7 +606,7 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "AuthAppStack/AuthServiceApi/Default/auth/confirm_signup/POST/Resource"
+    "aws:cdk:path": "EwdAss1Stack/AuthAppStack/AuthServiceApi/Default/auth/confirm_signup/POST/Resource"
    }
   },
   "AuthServiceApiauthsignin17EA6462": {
@@ -621,7 +621,7 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "AuthAppStack/AuthServiceApi/Default/auth/signin/Resource"
+    "aws:cdk:path": "EwdAss1Stack/AuthAppStack/AuthServiceApi/Default/auth/signin/Resource"
    }
   },
   "AuthServiceApiauthsigninOPTIONS2A0D0BC4": {
@@ -664,10 +664,10 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "AuthAppStack/AuthServiceApi/Default/auth/signin/OPTIONS/Resource"
+    "aws:cdk:path": "EwdAss1Stack/AuthAppStack/AuthServiceApi/Default/auth/signin/OPTIONS/Resource"
    }
   },
-  "AuthServiceApiauthsigninPOSTApiPermissionAuthAppStackAuthServiceApi9287C2C0POSTauthsignin51092E1C": {
+  "AuthServiceApiauthsigninPOSTApiPermissionEwdAss1StackAuthAppStackAuthServiceApi2A3333BFPOSTauthsignin9625492F": {
    "Type": "AWS::Lambda::Permission",
    "Properties": {
     "Action": "lambda:InvokeFunction",
@@ -708,10 +708,10 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "AuthAppStack/AuthServiceApi/Default/auth/signin/POST/ApiPermission.AuthAppStackAuthServiceApi9287C2C0.POST..auth.signin"
+    "aws:cdk:path": "EwdAss1Stack/AuthAppStack/AuthServiceApi/Default/auth/signin/POST/ApiPermission.EwdAss1StackAuthAppStackAuthServiceApi2A3333BF.POST..auth.signin"
    }
   },
-  "AuthServiceApiauthsigninPOSTApiPermissionTestAuthAppStackAuthServiceApi9287C2C0POSTauthsignin4E3B9335": {
+  "AuthServiceApiauthsigninPOSTApiPermissionTestEwdAss1StackAuthAppStackAuthServiceApi2A3333BFPOSTauthsignin334869A6": {
    "Type": "AWS::Lambda::Permission",
    "Properties": {
     "Action": "lambda:InvokeFunction",
@@ -748,7 +748,7 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "AuthAppStack/AuthServiceApi/Default/auth/signin/POST/ApiPermission.Test.AuthAppStackAuthServiceApi9287C2C0.POST..auth.signin"
+    "aws:cdk:path": "EwdAss1Stack/AuthAppStack/AuthServiceApi/Default/auth/signin/POST/ApiPermission.Test.EwdAss1StackAuthAppStackAuthServiceApi2A3333BF.POST..auth.signin"
    }
   },
   "AuthServiceApiauthsigninPOST7E3E38A0": {
@@ -791,7 +791,7 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "AuthAppStack/AuthServiceApi/Default/auth/signin/POST/Resource"
+    "aws:cdk:path": "EwdAss1Stack/AuthAppStack/AuthServiceApi/Default/auth/signin/POST/Resource"
    }
   },
   "AuthServiceApiauthsignout137525BA": {
@@ -806,7 +806,7 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "AuthAppStack/AuthServiceApi/Default/auth/signout/Resource"
+    "aws:cdk:path": "EwdAss1Stack/AuthAppStack/AuthServiceApi/Default/auth/signout/Resource"
    }
   },
   "AuthServiceApiauthsignoutOPTIONSB792AD47": {
@@ -849,10 +849,10 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "AuthAppStack/AuthServiceApi/Default/auth/signout/OPTIONS/Resource"
+    "aws:cdk:path": "EwdAss1Stack/AuthAppStack/AuthServiceApi/Default/auth/signout/OPTIONS/Resource"
    }
   },
-  "AuthServiceApiauthsignoutGETApiPermissionAuthAppStackAuthServiceApi9287C2C0GETauthsignout05F5D981": {
+  "AuthServiceApiauthsignoutGETApiPermissionEwdAss1StackAuthAppStackAuthServiceApi2A3333BFGETauthsignout08D0643F": {
    "Type": "AWS::Lambda::Permission",
    "Properties": {
     "Action": "lambda:InvokeFunction",
@@ -893,10 +893,10 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "AuthAppStack/AuthServiceApi/Default/auth/signout/GET/ApiPermission.AuthAppStackAuthServiceApi9287C2C0.GET..auth.signout"
+    "aws:cdk:path": "EwdAss1Stack/AuthAppStack/AuthServiceApi/Default/auth/signout/GET/ApiPermission.EwdAss1StackAuthAppStackAuthServiceApi2A3333BF.GET..auth.signout"
    }
   },
-  "AuthServiceApiauthsignoutGETApiPermissionTestAuthAppStackAuthServiceApi9287C2C0GETauthsignoutE3C0E631": {
+  "AuthServiceApiauthsignoutGETApiPermissionTestEwdAss1StackAuthAppStackAuthServiceApi2A3333BFGETauthsignoutA06EEC9C": {
    "Type": "AWS::Lambda::Permission",
    "Properties": {
     "Action": "lambda:InvokeFunction",
@@ -933,7 +933,7 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "AuthAppStack/AuthServiceApi/Default/auth/signout/GET/ApiPermission.Test.AuthAppStackAuthServiceApi9287C2C0.GET..auth.signout"
+    "aws:cdk:path": "EwdAss1Stack/AuthAppStack/AuthServiceApi/Default/auth/signout/GET/ApiPermission.Test.EwdAss1StackAuthAppStackAuthServiceApi2A3333BF.GET..auth.signout"
    }
   },
   "AuthServiceApiauthsignoutGET2B2655CD": {
@@ -976,7 +976,7 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "AuthAppStack/AuthServiceApi/Default/auth/signout/GET/Resource"
+    "aws:cdk:path": "EwdAss1Stack/AuthAppStack/AuthServiceApi/Default/auth/signout/GET/Resource"
    }
   },
   "SignupFnServiceRoleB51FBFF1": {
@@ -1010,7 +1010,7 @@
     ]
    },
    "Metadata": {
-    "aws:cdk:path": "AuthAppStack/SignupFn/ServiceRole/Resource"
+    "aws:cdk:path": "EwdAss1Stack/AuthAppStack/SignupFn/ServiceRole/Resource"
    }
   },
   "SignupFn336C4F73": {
@@ -1023,7 +1023,7 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "1cc3dc59f5bc5b4c85126960add7537e33717865279ca02ceaa9479ca054db5a.zip"
+     "S3Key": "3ed759077480c2fe0690f65dd26e1637c2612d0f49d8a35b33df66b196abb43d.zip"
     },
     "Environment": {
      "Variables": {
@@ -1054,8 +1054,8 @@
     "SignupFnServiceRoleB51FBFF1"
    ],
    "Metadata": {
-    "aws:cdk:path": "AuthAppStack/SignupFn/Resource",
-    "aws:asset:path": "asset.1cc3dc59f5bc5b4c85126960add7537e33717865279ca02ceaa9479ca054db5a",
+    "aws:cdk:path": "EwdAss1Stack/AuthAppStack/SignupFn/Resource",
+    "aws:asset:path": "D:\\TypeScript\\EWD-Ass1",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -1091,7 +1091,7 @@
     ]
    },
    "Metadata": {
-    "aws:cdk:path": "AuthAppStack/ConfirmFn/ServiceRole/Resource"
+    "aws:cdk:path": "EwdAss1Stack/AuthAppStack/ConfirmFn/ServiceRole/Resource"
    }
   },
   "ConfirmFnA2DFB0E0": {
@@ -1104,7 +1104,7 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "b048213aff95671ec4be473438452754858e5e21c1c3b2ddb9a2d1f470564c7d.zip"
+     "S3Key": "bc2371f9ae5f1c76f30db0c597c431eb924f935fcdb4ac8ed284df112f02cd52.zip"
     },
     "Environment": {
      "Variables": {
@@ -1135,8 +1135,8 @@
     "ConfirmFnServiceRole1655CA55"
    ],
    "Metadata": {
-    "aws:cdk:path": "AuthAppStack/ConfirmFn/Resource",
-    "aws:asset:path": "asset.b048213aff95671ec4be473438452754858e5e21c1c3b2ddb9a2d1f470564c7d",
+    "aws:cdk:path": "EwdAss1Stack/AuthAppStack/ConfirmFn/Resource",
+    "aws:asset:path": "D:\\TypeScript\\EWD-Ass1",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -1172,7 +1172,7 @@
     ]
    },
    "Metadata": {
-    "aws:cdk:path": "AuthAppStack/SigninFn/ServiceRole/Resource"
+    "aws:cdk:path": "EwdAss1Stack/AuthAppStack/SigninFn/ServiceRole/Resource"
    }
   },
   "SigninFnBC3BA31F": {
@@ -1185,7 +1185,7 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "a8254f58ff7af7e6bf5991a80e0342ea8aa89c5fde8b8d7d2457f34d31ab7f77.zip"
+     "S3Key": "ea9ed870d69dbc6d5f78486bc15ecdffc2df4636354745cd49c926373754c567.zip"
     },
     "Environment": {
      "Variables": {
@@ -1216,8 +1216,8 @@
     "SigninFnServiceRole084C9885"
    ],
    "Metadata": {
-    "aws:cdk:path": "AuthAppStack/SigninFn/Resource",
-    "aws:asset:path": "asset.a8254f58ff7af7e6bf5991a80e0342ea8aa89c5fde8b8d7d2457f34d31ab7f77",
+    "aws:cdk:path": "EwdAss1Stack/AuthAppStack/SigninFn/Resource",
+    "aws:asset:path": "D:\\TypeScript\\EWD-Ass1",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -1253,7 +1253,7 @@
     ]
    },
    "Metadata": {
-    "aws:cdk:path": "AuthAppStack/SignoutFn/ServiceRole/Resource"
+    "aws:cdk:path": "EwdAss1Stack/AuthAppStack/SignoutFn/ServiceRole/Resource"
    }
   },
   "SignoutFnEA9B2CE3": {
@@ -1266,7 +1266,7 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "7564b3916c1f0810e96c6dcdf0764b5b899420a8a6ce0015f43bf66eb5116441.zip"
+     "S3Key": "4667a9ca08ba1a065f0bf500f211a54cf108ba795f0b7b118e740b3173c28403.zip"
     },
     "Environment": {
      "Variables": {
@@ -1297,8 +1297,8 @@
     "SignoutFnServiceRole3AF7B732"
    ],
    "Metadata": {
-    "aws:cdk:path": "AuthAppStack/SignoutFn/Resource",
-    "aws:asset:path": "asset.7564b3916c1f0810e96c6dcdf0764b5b899420a8a6ce0015f43bf66eb5116441",
+    "aws:cdk:path": "EwdAss1Stack/AuthAppStack/SignoutFn/Resource",
+    "aws:asset:path": "D:\\TypeScript\\EWD-Ass1",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -1309,12 +1309,24 @@
     "Analytics": "v2:deflate64:H4sIAAAAAAAA/02PzU7DMBCEn6V3Z4FyybUN4laoijhHrrOETRw7ym6oqijvjp0fiGRpvp0dW+M9pCk87vSNE1PUiaUrDB+iTa2ClQ/Gl47Ew/DJ2J29tyr7cn+8QmYJnWxXszMq3VKpBW/6DsMFWQ4txdiKL9haf2+Wy5spVCgxejOEvO87g0fNqE4o376Iy4XW7fLyxKOyurkWGoZgnrFriJm8i5HX3hkJvEZy5wusGN4mWbeKdBM6ezs/G3RU/JxrZhSGQ5Qww7E3NUrsNcbcey9tL/+Nplz8A7lyWy9y5l1Bc5HYACp++HlKIZz9rmKipOudUINwmfUXtpE9hqsBAAA="
    },
    "Metadata": {
-    "aws:cdk:path": "AuthAppStack/CDKMetadata/Default"
+    "aws:cdk:path": "EwdAss1Stack/AuthAppStack/CDKMetadata/Default"
    },
    "Condition": "CDKMetadataAvailable"
   }
  },
  "Outputs": {
+  "UserPoolIdOutput": {
+   "Description": "User Pool ID",
+   "Value": {
+    "Ref": "UserPool6BA7E5F2"
+   }
+  },
+  "UserPoolClientIdOutput": {
+   "Description": "User Pool Client ID",
+   "Value": {
+    "Ref": "UserPoolAppClientDD0407EC"
+   }
+  },
   "AuthServiceApiEndpoint7E6B8279": {
    "Value": {
     "Fn::Join": [

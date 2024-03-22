@@ -8,6 +8,8 @@ import * as apig from "aws-cdk-lib/aws-apigateway";
 import * as lambdanode from "aws-cdk-lib/aws-lambda-nodejs";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as iam from "aws-cdk-lib/aws-iam";
+// import { AuthAppStack } from "./auth-api-stack";
+import * as node from "aws-cdk-lib/aws-lambda-nodejs";
 
 export class EwdAss1Stack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -42,6 +44,20 @@ export class EwdAss1Stack extends cdk.Stack {
         REGION: "eu-west-1",
       },
     };
+    // const authorizerFn = new node.NodejsFunction(this, "AuthorizerFn", {
+    //   ...appCommonFnProps,
+    //   entry: "./lambdas/auth/authorizer.ts",
+    // });
+
+    // const requestAuthorizer = new apig.RequestAuthorizer(
+    //   this,
+    //   "RequestAuthorizer",
+    //   {
+    //     identitySources: [apig.IdentitySource.header("cookie")],
+    //     handler: authorizerFn,
+    //     resultsCacheTtl: cdk.Duration.minutes(0),
+    //   }
+    // );
     const getreviewbymovieId = new lambdanode.NodejsFunction(
       this,
       "GetReviewbyMovieId",

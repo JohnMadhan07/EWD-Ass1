@@ -29,6 +29,14 @@ export class AuthAppStack extends cdk.Stack {
 
     this.userPoolClientId = appClient.userPoolClientId;
 
+    // new cdk.CfnOutput(this, 'UserPoolIdOutput', {
+    //   value: this.userPoolId,
+    //   description: 'User Pool ID',
+    // });
+    // new cdk.CfnOutput(this, 'UserPoolClientIdOutput', {
+    //   value: this.userPoolClientId,
+    //   description: 'User Pool Client ID',
+    // });
     const authApi = new apig.RestApi(this, "AuthServiceApi", {
       description: "Authentication Service RestApi",
       endpointTypes: [apig.EndpointType.REGIONAL],
