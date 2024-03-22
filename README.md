@@ -2,7 +2,7 @@
 
 __Name:__ Madhan Kumar Venugopal
 
-__Video demonstration:__ ..... URL of your Youtube video demonstration ....
+__Video demonstration:__(https://www.youtube.com/watch?v=Ygc2xXb8Gp0)
 
 This repository contains an implementation of a serverless REST API for the AWS platform. The CDK framework is used to provision its infrastructure. The API's domain context is movie reviews.
 
@@ -15,6 +15,7 @@ This repository contains an implementation of a serverless REST API for the AWS 
 + GET /movies/{movieId}/reviews/{year} - Get the reviews written in a specific year for a specific movie.
 + GET /reviews/{reviewerName} - Get all the reviews written by a specific reviewer.
 + GET /reviews/{reviewerName}/{movieId}/translation?language=code - Get a translated version of a movie review using the movie ID and reviewer name as the identifier.
++ PUT /movies/{movieId}/reviews/{reviewerName} - Update the text of a review.(Table not updated).
 
 ### Screenshots of API Endpoints.
 
