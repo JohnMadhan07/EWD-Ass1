@@ -1,0 +1,2619 @@
+{
+ "Resources": {
+  "MovieReviewsTable92783803": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "movieId",
+      "AttributeType": "N"
+     },
+     {
+      "AttributeName": "ReviewDate",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "ReviewerName",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "GlobalSecondaryIndexes": [
+     {
+      "IndexName": "reviewsIx",
+      "KeySchema": [
+       {
+        "AttributeName": "ReviewerName",
+        "KeyType": "HASH"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     }
+    ],
+    "KeySchema": [
+     {
+      "AttributeName": "movieId",
+      "KeyType": "HASH"
+     },
+     {
+      "AttributeName": "ReviewDate",
+      "KeyType": "RANGE"
+     }
+    ],
+    "LocalSecondaryIndexes": [
+     {
+      "IndexName": "reviewerIx",
+      "KeySchema": [
+       {
+        "AttributeName": "movieId",
+        "KeyType": "HASH"
+       },
+       {
+        "AttributeName": "ReviewerName",
+        "KeyType": "RANGE"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     }
+    ],
+    "TableName": "MovieReviews"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/MovieReviewsTable/Resource"
+   }
+  },
+  "GetReviewbyMovieIdServiceRole0E43E7F2": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/GetReviewbyMovieId/ServiceRole/Resource"
+   }
+  },
+  "GetReviewbyMovieIdServiceRoleDefaultPolicyF66FFEE3": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:Query",
+        "dynamodb:Scan"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "MovieReviewsTable92783803",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "MovieReviewsTable92783803",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "GetReviewbyMovieIdServiceRoleDefaultPolicyF66FFEE3",
+    "Roles": [
+     {
+      "Ref": "GetReviewbyMovieIdServiceRole0E43E7F2"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/GetReviewbyMovieId/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "GetReviewbyMovieIdE8B2840B": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Architectures": [
+     "arm64"
+    ],
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "2f8781947a2ddffbf0818ff560beb273ad0d82c850efb21db2a9e02f20696c9e.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "TABLE_NAME": {
+       "Ref": "MovieReviewsTable92783803"
+      },
+      "REGION": "eu-west-1",
+      "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1"
+     }
+    },
+    "Handler": "index.handler",
+    "MemorySize": 128,
+    "Role": {
+     "Fn::GetAtt": [
+      "GetReviewbyMovieIdServiceRole0E43E7F2",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x",
+    "Timeout": 10
+   },
+   "DependsOn": [
+    "GetReviewbyMovieIdServiceRoleDefaultPolicyF66FFEE3",
+    "GetReviewbyMovieIdServiceRole0E43E7F2"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/GetReviewbyMovieId/Resource",
+    "aws:asset:path": "D:\\TypeScript\\EWD-Ass1",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "getreviewbyreviewernameformovieServiceRole275D1B76": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/getreviewbyreviewernameformovie/ServiceRole/Resource"
+   }
+  },
+  "getreviewbyreviewernameformovieServiceRoleDefaultPolicy7597E0BD": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:Query",
+        "dynamodb:Scan"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "MovieReviewsTable92783803",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "MovieReviewsTable92783803",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "getreviewbyreviewernameformovieServiceRoleDefaultPolicy7597E0BD",
+    "Roles": [
+     {
+      "Ref": "getreviewbyreviewernameformovieServiceRole275D1B76"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/getreviewbyreviewernameformovie/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "getreviewbyreviewernameformovieEF357F7B": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Architectures": [
+     "arm64"
+    ],
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "8175f5ecb3a8bae69d9c8a3117ec721aecc1bfe94149a7499513fb36b66a30f4.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "TABLE_NAME": {
+       "Ref": "MovieReviewsTable92783803"
+      },
+      "REGION": "eu-west-1",
+      "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1"
+     }
+    },
+    "Handler": "index.handler",
+    "MemorySize": 128,
+    "Role": {
+     "Fn::GetAtt": [
+      "getreviewbyreviewernameformovieServiceRole275D1B76",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x",
+    "Timeout": 10
+   },
+   "DependsOn": [
+    "getreviewbyreviewernameformovieServiceRoleDefaultPolicy7597E0BD",
+    "getreviewbyreviewernameformovieServiceRole275D1B76"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/getreviewbyreviewernameformovie/Resource",
+    "aws:asset:path": "D:\\TypeScript\\EWD-Ass1",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "getallreviewsbyreviewerServiceRole27052801": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/getallreviewsbyreviewer/ServiceRole/Resource"
+   }
+  },
+  "getallreviewsbyreviewerServiceRoleDefaultPolicy935DCA84": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:Query",
+        "dynamodb:Scan"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "MovieReviewsTable92783803",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "MovieReviewsTable92783803",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "getallreviewsbyreviewerServiceRoleDefaultPolicy935DCA84",
+    "Roles": [
+     {
+      "Ref": "getallreviewsbyreviewerServiceRole27052801"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/getallreviewsbyreviewer/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "getallreviewsbyreviewer831156D2": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Architectures": [
+     "arm64"
+    ],
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "acf0efaa8a1970f508af4c7e78c9942c24c8e606169e47aafd05351ca5a4f121.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "TABLE_NAME": {
+       "Ref": "MovieReviewsTable92783803"
+      },
+      "REGION": "eu-west-1",
+      "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1"
+     }
+    },
+    "Handler": "index.handler",
+    "MemorySize": 128,
+    "Role": {
+     "Fn::GetAtt": [
+      "getallreviewsbyreviewerServiceRole27052801",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x",
+    "Timeout": 10
+   },
+   "DependsOn": [
+    "getallreviewsbyreviewerServiceRoleDefaultPolicy935DCA84",
+    "getallreviewsbyreviewerServiceRole27052801"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/getallreviewsbyreviewer/Resource",
+    "aws:asset:path": "D:\\TypeScript\\EWD-Ass1",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "addmoviereviewServiceRoleD683E60F": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/addmoviereview/ServiceRole/Resource"
+   }
+  },
+  "addmoviereviewServiceRoleDefaultPolicy61F589EA": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "MovieReviewsTable92783803",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "MovieReviewsTable92783803",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "addmoviereviewServiceRoleDefaultPolicy61F589EA",
+    "Roles": [
+     {
+      "Ref": "addmoviereviewServiceRoleD683E60F"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/addmoviereview/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "addmoviereview6D9D51FF": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Architectures": [
+     "arm64"
+    ],
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "2fcbc3d39980f191b95bf203e1517fb99b673aac1795415d2181cf846aa9efc0.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "TABLE_NAME": {
+       "Ref": "MovieReviewsTable92783803"
+      },
+      "REGION": "eu-west-1",
+      "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1"
+     }
+    },
+    "Handler": "index.handler",
+    "MemorySize": 128,
+    "Role": {
+     "Fn::GetAtt": [
+      "addmoviereviewServiceRoleD683E60F",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x",
+    "Timeout": 10
+   },
+   "DependsOn": [
+    "addmoviereviewServiceRoleDefaultPolicy61F589EA",
+    "addmoviereviewServiceRoleD683E60F"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/addmoviereview/Resource",
+    "aws:asset:path": "D:\\TypeScript\\EWD-Ass1",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "updatemoviereviewServiceRoleD2349B0C": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/updatemoviereview/ServiceRole/Resource"
+   }
+  },
+  "updatemoviereviewServiceRoleDefaultPolicy723F1DF4": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "MovieReviewsTable92783803",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "MovieReviewsTable92783803",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "updatemoviereviewServiceRoleDefaultPolicy723F1DF4",
+    "Roles": [
+     {
+      "Ref": "updatemoviereviewServiceRoleD2349B0C"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/updatemoviereview/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "updatemoviereviewFFEA0210": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Architectures": [
+     "arm64"
+    ],
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "ac34a235bebe9a1b3585944475d4f9d5674735233664057ecc847d0140e3f172.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "TABLE_NAME": {
+       "Ref": "MovieReviewsTable92783803"
+      },
+      "REGION": "eu-west-1",
+      "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1"
+     }
+    },
+    "Handler": "index.handler",
+    "MemorySize": 128,
+    "Role": {
+     "Fn::GetAtt": [
+      "updatemoviereviewServiceRoleD2349B0C",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x",
+    "Timeout": 10
+   },
+   "DependsOn": [
+    "updatemoviereviewServiceRoleDefaultPolicy723F1DF4",
+    "updatemoviereviewServiceRoleD2349B0C"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/updatemoviereview/Resource",
+    "aws:asset:path": "D:\\TypeScript\\EWD-Ass1",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "gettranslatedreviewServiceRole75E50761": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/gettranslatedreview/ServiceRole/Resource"
+   }
+  },
+  "gettranslatedreviewServiceRoleDefaultPolicyA4A0F9EB": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "translate:TranslateText",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:Query",
+        "dynamodb:Scan"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "MovieReviewsTable92783803",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "MovieReviewsTable92783803",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "gettranslatedreviewServiceRoleDefaultPolicyA4A0F9EB",
+    "Roles": [
+     {
+      "Ref": "gettranslatedreviewServiceRole75E50761"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/gettranslatedreview/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "gettranslatedreviewDA75F47C": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Architectures": [
+     "arm64"
+    ],
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "bd027f72f4e5dda13eee7f9e533a0a6de8cdf7d99b9c722732e5182ff3761a5b.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "TABLE_NAME": {
+       "Ref": "MovieReviewsTable92783803"
+      },
+      "REGION": "eu-west-1",
+      "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1"
+     }
+    },
+    "Handler": "index.handler",
+    "MemorySize": 128,
+    "Role": {
+     "Fn::GetAtt": [
+      "gettranslatedreviewServiceRole75E50761",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x",
+    "Timeout": 10
+   },
+   "DependsOn": [
+    "gettranslatedreviewServiceRoleDefaultPolicyA4A0F9EB",
+    "gettranslatedreviewServiceRole75E50761"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/gettranslatedreview/Resource",
+    "aws:asset:path": "D:\\TypeScript\\EWD-Ass1",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "RestAPI1CC12F26": {
+   "Type": "AWS::ApiGateway::RestApi",
+   "Properties": {
+    "Description": "MovieReview api",
+    "Name": "RestAPI"
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/Resource"
+   }
+  },
+  "RestAPIDeploymentD35A538028dd2f3f751b433f6d3205c8b64b87a9": {
+   "Type": "AWS::ApiGateway::Deployment",
+   "Properties": {
+    "Description": "MovieReview api",
+    "RestApiId": {
+     "Ref": "RestAPI1CC12F26"
+    }
+   },
+   "DependsOn": [
+    "RestAPImoviesmovieIdOPTIONSC1FB0512",
+    "RestAPImoviesmovieId3DE0D522",
+    "RestAPImoviesmovieIdreviewsParameterGET80285751",
+    "RestAPImoviesmovieIdreviewsParameterOPTIONS251C6609",
+    "RestAPImoviesmovieIdreviewsParameterPUT220352C4",
+    "RestAPImoviesmovieIdreviewsParameterAD66F295",
+    "RestAPImoviesmovieIdreviewsGETE34AC9B8",
+    "RestAPImoviesmovieIdreviewsOPTIONSCFDDE4D4",
+    "RestAPImoviesmovieIdreviews5115F3C9",
+    "RestAPImoviesOPTIONS1E02A856",
+    "RestAPImoviesPOSTC027C064",
+    "RestAPImoviesA51CB040",
+    "RestAPIOPTIONS3271A002",
+    "RestAPIreviewsReviewerNamemovieIdOPTIONS52398207",
+    "RestAPIreviewsReviewerNamemovieIdFBF904CE",
+    "RestAPIreviewsReviewerNamemovieIdtranslationGET0D835010",
+    "RestAPIreviewsReviewerNamemovieIdtranslationOPTIONSC86D3899",
+    "RestAPIreviewsReviewerNamemovieIdtranslationB9799035",
+    "RestAPIreviewsReviewerNameGETEB37644F",
+    "RestAPIreviewsReviewerNameOPTIONS28BE44E7",
+    "RestAPIreviewsReviewerName28B26C8D",
+    "RestAPIreviewsOPTIONSDD8869D8",
+    "RestAPIreviews01E5E6AA"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/Deployment/Resource"
+   }
+  },
+  "RestAPIDeploymentStagedev1DE74094": {
+   "Type": "AWS::ApiGateway::Stage",
+   "Properties": {
+    "DeploymentId": {
+     "Ref": "RestAPIDeploymentD35A538028dd2f3f751b433f6d3205c8b64b87a9"
+    },
+    "RestApiId": {
+     "Ref": "RestAPI1CC12F26"
+    },
+    "StageName": "dev"
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/DeploymentStage.dev/Resource"
+   }
+  },
+  "RestAPIOPTIONS3271A002": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,POST,PUT,PATCH,DELETE'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Fn::GetAtt": [
+      "RestAPI1CC12F26",
+      "RootResourceId"
+     ]
+    },
+    "RestApiId": {
+     "Ref": "RestAPI1CC12F26"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/Default/OPTIONS/Resource"
+   }
+  },
+  "RestAPImoviesA51CB040": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "RestAPI1CC12F26",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "movies",
+    "RestApiId": {
+     "Ref": "RestAPI1CC12F26"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/Default/movies/Resource"
+   }
+  },
+  "RestAPImoviesOPTIONS1E02A856": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,POST,PUT,PATCH,DELETE'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "RestAPImoviesA51CB040"
+    },
+    "RestApiId": {
+     "Ref": "RestAPI1CC12F26"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/Default/movies/OPTIONS/Resource"
+   }
+  },
+  "RestAPImoviesmovieId3DE0D522": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "RestAPImoviesA51CB040"
+    },
+    "PathPart": "{movieId}",
+    "RestApiId": {
+     "Ref": "RestAPI1CC12F26"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/Default/movies/{movieId}/Resource"
+   }
+  },
+  "RestAPImoviesmovieIdOPTIONSC1FB0512": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,POST,PUT,PATCH,DELETE'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "RestAPImoviesmovieId3DE0D522"
+    },
+    "RestApiId": {
+     "Ref": "RestAPI1CC12F26"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/Default/movies/{movieId}/OPTIONS/Resource"
+   }
+  },
+  "RestAPImoviesmovieIdreviews5115F3C9": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "RestAPImoviesmovieId3DE0D522"
+    },
+    "PathPart": "reviews",
+    "RestApiId": {
+     "Ref": "RestAPI1CC12F26"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/Default/movies/{movieId}/reviews/Resource"
+   }
+  },
+  "RestAPImoviesmovieIdreviewsOPTIONSCFDDE4D4": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,POST,PUT,PATCH,DELETE'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "RestAPImoviesmovieIdreviews5115F3C9"
+    },
+    "RestApiId": {
+     "Ref": "RestAPI1CC12F26"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/Default/movies/{movieId}/reviews/OPTIONS/Resource"
+   }
+  },
+  "RestAPImoviesmovieIdreviewsGETApiPermissionEwdAss1StackRestAPI77FD7F69GETmoviesmovieIdreviews8E913C24": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "GetReviewbyMovieIdE8B2840B",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "RestAPI1CC12F26"
+       },
+       "/",
+       {
+        "Ref": "RestAPIDeploymentStagedev1DE74094"
+       },
+       "/GET/movies/*/reviews"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/Default/movies/{movieId}/reviews/GET/ApiPermission.EwdAss1StackRestAPI77FD7F69.GET..movies.{movieId}.reviews"
+   }
+  },
+  "RestAPImoviesmovieIdreviewsGETApiPermissionTestEwdAss1StackRestAPI77FD7F69GETmoviesmovieIdreviewsDD743137": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "GetReviewbyMovieIdE8B2840B",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "RestAPI1CC12F26"
+       },
+       "/test-invoke-stage/GET/movies/*/reviews"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/Default/movies/{movieId}/reviews/GET/ApiPermission.Test.EwdAss1StackRestAPI77FD7F69.GET..movies.{movieId}.reviews"
+   }
+  },
+  "RestAPImoviesmovieIdreviewsGETE34AC9B8": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "GetReviewbyMovieIdE8B2840B",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "RestAPImoviesmovieIdreviews5115F3C9"
+    },
+    "RestApiId": {
+     "Ref": "RestAPI1CC12F26"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/Default/movies/{movieId}/reviews/GET/Resource"
+   }
+  },
+  "RestAPImoviesmovieIdreviewsParameterAD66F295": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "RestAPImoviesmovieIdreviews5115F3C9"
+    },
+    "PathPart": "{Parameter}",
+    "RestApiId": {
+     "Ref": "RestAPI1CC12F26"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/Default/movies/{movieId}/reviews/{Parameter}/Resource"
+   }
+  },
+  "RestAPImoviesmovieIdreviewsParameterOPTIONS251C6609": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,POST,PUT,PATCH,DELETE'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "RestAPImoviesmovieIdreviewsParameterAD66F295"
+    },
+    "RestApiId": {
+     "Ref": "RestAPI1CC12F26"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/Default/movies/{movieId}/reviews/{Parameter}/OPTIONS/Resource"
+   }
+  },
+  "RestAPImoviesmovieIdreviewsParameterGETApiPermissionEwdAss1StackRestAPI77FD7F69GETmoviesmovieIdreviewsParameter864F7D04": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "getreviewbyreviewernameformovieEF357F7B",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "RestAPI1CC12F26"
+       },
+       "/",
+       {
+        "Ref": "RestAPIDeploymentStagedev1DE74094"
+       },
+       "/GET/movies/*/reviews/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/Default/movies/{movieId}/reviews/{Parameter}/GET/ApiPermission.EwdAss1StackRestAPI77FD7F69.GET..movies.{movieId}.reviews.{Parameter}"
+   }
+  },
+  "RestAPImoviesmovieIdreviewsParameterGETApiPermissionTestEwdAss1StackRestAPI77FD7F69GETmoviesmovieIdreviewsParameterF5842AFE": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "getreviewbyreviewernameformovieEF357F7B",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "RestAPI1CC12F26"
+       },
+       "/test-invoke-stage/GET/movies/*/reviews/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/Default/movies/{movieId}/reviews/{Parameter}/GET/ApiPermission.Test.EwdAss1StackRestAPI77FD7F69.GET..movies.{movieId}.reviews.{Parameter}"
+   }
+  },
+  "RestAPImoviesmovieIdreviewsParameterGET80285751": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "getreviewbyreviewernameformovieEF357F7B",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "RestAPImoviesmovieIdreviewsParameterAD66F295"
+    },
+    "RestApiId": {
+     "Ref": "RestAPI1CC12F26"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/Default/movies/{movieId}/reviews/{Parameter}/GET/Resource"
+   }
+  },
+  "RestAPImoviesmovieIdreviewsParameterPUTApiPermissionEwdAss1StackRestAPI77FD7F69PUTmoviesmovieIdreviewsParameter3EEAADF8": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "updatemoviereviewFFEA0210",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "RestAPI1CC12F26"
+       },
+       "/",
+       {
+        "Ref": "RestAPIDeploymentStagedev1DE74094"
+       },
+       "/PUT/movies/*/reviews/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/Default/movies/{movieId}/reviews/{Parameter}/PUT/ApiPermission.EwdAss1StackRestAPI77FD7F69.PUT..movies.{movieId}.reviews.{Parameter}"
+   }
+  },
+  "RestAPImoviesmovieIdreviewsParameterPUTApiPermissionTestEwdAss1StackRestAPI77FD7F69PUTmoviesmovieIdreviewsParameterC1BE780A": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "updatemoviereviewFFEA0210",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "RestAPI1CC12F26"
+       },
+       "/test-invoke-stage/PUT/movies/*/reviews/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/Default/movies/{movieId}/reviews/{Parameter}/PUT/ApiPermission.Test.EwdAss1StackRestAPI77FD7F69.PUT..movies.{movieId}.reviews.{Parameter}"
+   }
+  },
+  "RestAPImoviesmovieIdreviewsParameterPUT220352C4": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "PUT",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "updatemoviereviewFFEA0210",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "RestAPImoviesmovieIdreviewsParameterAD66F295"
+    },
+    "RestApiId": {
+     "Ref": "RestAPI1CC12F26"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/Default/movies/{movieId}/reviews/{Parameter}/PUT/Resource"
+   }
+  },
+  "RestAPImoviesPOSTApiPermissionEwdAss1StackRestAPI77FD7F69POSTmoviesDF31F4E1": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "addmoviereview6D9D51FF",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "RestAPI1CC12F26"
+       },
+       "/",
+       {
+        "Ref": "RestAPIDeploymentStagedev1DE74094"
+       },
+       "/POST/movies"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/Default/movies/POST/ApiPermission.EwdAss1StackRestAPI77FD7F69.POST..movies"
+   }
+  },
+  "RestAPImoviesPOSTApiPermissionTestEwdAss1StackRestAPI77FD7F69POSTmovies59752E0F": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "addmoviereview6D9D51FF",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "RestAPI1CC12F26"
+       },
+       "/test-invoke-stage/POST/movies"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/Default/movies/POST/ApiPermission.Test.EwdAss1StackRestAPI77FD7F69.POST..movies"
+   }
+  },
+  "RestAPImoviesPOSTC027C064": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "addmoviereview6D9D51FF",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "RestAPImoviesA51CB040"
+    },
+    "RestApiId": {
+     "Ref": "RestAPI1CC12F26"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/Default/movies/POST/Resource"
+   }
+  },
+  "RestAPIreviews01E5E6AA": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "RestAPI1CC12F26",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "reviews",
+    "RestApiId": {
+     "Ref": "RestAPI1CC12F26"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/Default/reviews/Resource"
+   }
+  },
+  "RestAPIreviewsOPTIONSDD8869D8": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,POST,PUT,PATCH,DELETE'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "RestAPIreviews01E5E6AA"
+    },
+    "RestApiId": {
+     "Ref": "RestAPI1CC12F26"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/Default/reviews/OPTIONS/Resource"
+   }
+  },
+  "RestAPIreviewsReviewerName28B26C8D": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "RestAPIreviews01E5E6AA"
+    },
+    "PathPart": "{ReviewerName}",
+    "RestApiId": {
+     "Ref": "RestAPI1CC12F26"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/Default/reviews/{ReviewerName}/Resource"
+   }
+  },
+  "RestAPIreviewsReviewerNameOPTIONS28BE44E7": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,POST,PUT,PATCH,DELETE'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "RestAPIreviewsReviewerName28B26C8D"
+    },
+    "RestApiId": {
+     "Ref": "RestAPI1CC12F26"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/Default/reviews/{ReviewerName}/OPTIONS/Resource"
+   }
+  },
+  "RestAPIreviewsReviewerNameGETApiPermissionEwdAss1StackRestAPI77FD7F69GETreviewsReviewerName5CD0F7D3": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "getallreviewsbyreviewer831156D2",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "RestAPI1CC12F26"
+       },
+       "/",
+       {
+        "Ref": "RestAPIDeploymentStagedev1DE74094"
+       },
+       "/GET/reviews/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/Default/reviews/{ReviewerName}/GET/ApiPermission.EwdAss1StackRestAPI77FD7F69.GET..reviews.{ReviewerName}"
+   }
+  },
+  "RestAPIreviewsReviewerNameGETApiPermissionTestEwdAss1StackRestAPI77FD7F69GETreviewsReviewerName57F020A4": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "getallreviewsbyreviewer831156D2",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "RestAPI1CC12F26"
+       },
+       "/test-invoke-stage/GET/reviews/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/Default/reviews/{ReviewerName}/GET/ApiPermission.Test.EwdAss1StackRestAPI77FD7F69.GET..reviews.{ReviewerName}"
+   }
+  },
+  "RestAPIreviewsReviewerNameGETEB37644F": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "getallreviewsbyreviewer831156D2",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "RestAPIreviewsReviewerName28B26C8D"
+    },
+    "RestApiId": {
+     "Ref": "RestAPI1CC12F26"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/Default/reviews/{ReviewerName}/GET/Resource"
+   }
+  },
+  "RestAPIreviewsReviewerNamemovieIdFBF904CE": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "RestAPIreviewsReviewerName28B26C8D"
+    },
+    "PathPart": "{movieId}",
+    "RestApiId": {
+     "Ref": "RestAPI1CC12F26"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/Default/reviews/{ReviewerName}/{movieId}/Resource"
+   }
+  },
+  "RestAPIreviewsReviewerNamemovieIdOPTIONS52398207": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,POST,PUT,PATCH,DELETE'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "RestAPIreviewsReviewerNamemovieIdFBF904CE"
+    },
+    "RestApiId": {
+     "Ref": "RestAPI1CC12F26"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/Default/reviews/{ReviewerName}/{movieId}/OPTIONS/Resource"
+   }
+  },
+  "RestAPIreviewsReviewerNamemovieIdtranslationB9799035": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "RestAPIreviewsReviewerNamemovieIdFBF904CE"
+    },
+    "PathPart": "translation",
+    "RestApiId": {
+     "Ref": "RestAPI1CC12F26"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/Default/reviews/{ReviewerName}/{movieId}/translation/Resource"
+   }
+  },
+  "RestAPIreviewsReviewerNamemovieIdtranslationOPTIONSC86D3899": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,POST,PUT,PATCH,DELETE'",
+        "method.response.header.Access-Control-Allow-Credentials": "'true'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Credentials": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "RestAPIreviewsReviewerNamemovieIdtranslationB9799035"
+    },
+    "RestApiId": {
+     "Ref": "RestAPI1CC12F26"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/Default/reviews/{ReviewerName}/{movieId}/translation/OPTIONS/Resource"
+   }
+  },
+  "RestAPIreviewsReviewerNamemovieIdtranslationGETApiPermissionEwdAss1StackRestAPI77FD7F69GETreviewsReviewerNamemovieIdtranslation3DF776A4": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "gettranslatedreviewDA75F47C",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "RestAPI1CC12F26"
+       },
+       "/",
+       {
+        "Ref": "RestAPIDeploymentStagedev1DE74094"
+       },
+       "/GET/reviews/*/*/translation"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/Default/reviews/{ReviewerName}/{movieId}/translation/GET/ApiPermission.EwdAss1StackRestAPI77FD7F69.GET..reviews.{ReviewerName}.{movieId}.translation"
+   }
+  },
+  "RestAPIreviewsReviewerNamemovieIdtranslationGETApiPermissionTestEwdAss1StackRestAPI77FD7F69GETreviewsReviewerNamemovieIdtranslation5459F5C7": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "gettranslatedreviewDA75F47C",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "RestAPI1CC12F26"
+       },
+       "/test-invoke-stage/GET/reviews/*/*/translation"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/Default/reviews/{ReviewerName}/{movieId}/translation/GET/ApiPermission.Test.EwdAss1StackRestAPI77FD7F69.GET..reviews.{ReviewerName}.{movieId}.translation"
+   }
+  },
+  "RestAPIreviewsReviewerNamemovieIdtranslationGET0D835010": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "gettranslatedreviewDA75F47C",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "RestAPIreviewsReviewerNamemovieIdtranslationB9799035"
+    },
+    "RestApiId": {
+     "Ref": "RestAPI1CC12F26"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/RestAPI/Default/reviews/{ReviewerName}/{movieId}/translation/GET/Resource"
+   }
+  },
+  "moviereviewsddbInitDataA0E05B79": {
+   "Type": "Custom::AWS",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "AWS679f53fac002430cb0da5b7982bd22872D164C4C",
+      "Arn"
+     ]
+    },
+    "Create": {
+     "Fn::Join": [
+      "",
+      [
+       "{\"service\":\"DynamoDB\",\"action\":\"batchWriteItem\",\"parameters\":{\"RequestItems\":{\"",
+       {
+        "Ref": "MovieReviewsTable92783803"
+       },
+       "\":[{\"PutRequest\":{\"Item\":{\"movieId\":{\"N\":\"1\"},\"ReviewerName\":{\"S\":\"user1\"},\"ReviewDate\":{\"S\":\"2023-01-15\"},\"Content\":{\"S\":\"This movie was amazing!\"},\"Rating\":{\"N\":\"5\"}}}},{\"PutRequest\":{\"Item\":{\"movieId\":{\"N\":\"1\"},\"ReviewerName\":{\"S\":\"user1\"},\"ReviewDate\":{\"S\":\"2021-01-16\"},\"Content\":{\"S\":\"Okayish Movie!\"},\"Rating\":{\"N\":\"5\"}}}},{\"PutRequest\":{\"Item\":{\"movieId\":{\"N\":\"2\"},\"ReviewerName\":{\"S\":\"user2\"},\"ReviewDate\":{\"S\":\"2023-02-20\"},\"Content\":{\"S\":\"Average movie, nothing special.\"},\"Rating\":{\"N\":\"3\"}}}},{\"PutRequest\":{\"Item\":{\"movieId\":{\"N\":\"3\"},\"ReviewerName\":{\"S\":\"user3\"},\"ReviewDate\":{\"S\":\"2023-03-25\"},\"Content\":{\"S\":\"Terrible acting, not worth watching.\"},\"Rating\":{\"N\":\"1\"}}}},{\"PutRequest\":{\"Item\":{\"movieId\":{\"N\":\"4\"},\"ReviewerName\":{\"S\":\"user4\"},\"ReviewDate\":{\"S\":\"2021-04-10\"},\"Content\":{\"S\":\"Enjoyed it, would recommend!\"},\"Rating\":{\"N\":\"4\"}}}},{\"PutRequest\":{\"Item\":{\"movieId\":{\"N\":\"5\"},\"ReviewerName\":{\"S\":\"user2\"},\"ReviewDate\":{\"S\":\"2020-05-05\"},\"Content\":{\"S\":\"Great storyline, but pacing was a bit slow.\"},\"Rating\":{\"N\":\"4\"}}}}]}},\"physicalResourceId\":{\"id\":\"moviereviewsddbInitData\"}}"
+      ]
+     ]
+    },
+    "InstallLatestAwsSdk": false
+   },
+   "DependsOn": [
+    "moviereviewsddbInitDataCustomResourcePolicyB89D625C"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/moviereviewsddbInitData/Resource/Default"
+   }
+  },
+  "moviereviewsddbInitDataCustomResourcePolicyB89D625C": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "dynamodb:BatchWriteItem",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "MovieReviewsTable92783803",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "moviereviewsddbInitDataCustomResourcePolicyB89D625C",
+    "Roles": [
+     {
+      "Ref": "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/moviereviewsddbInitData/CustomResourcePolicy/Resource"
+   }
+  },
+  "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/AWS679f53fac002430cb0da5b7982bd2287/ServiceRole/Resource"
+   }
+  },
+  "AWS679f53fac002430cb0da5b7982bd22872D164C4C": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "099a3112386fa620b3069790dcf92c8e64bb5341760a8b0a76bfa843f8ad41df.zip"
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x",
+    "Timeout": 120
+   },
+   "DependsOn": [
+    "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/AWS679f53fac002430cb0da5b7982bd2287/Resource",
+    "aws:asset:path": "asset.099a3112386fa620b3069790dcf92c8e64bb5341760a8b0a76bfa843f8ad41df",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/11Qy26EMAz8lr2HtN1euO5S9daHdntHIXFpgCQIO0UI8e9NAluqSpE8M7ZH4xx5nvP7gxgxk6rNOl3x+UpCtixI5awmK4xTQfwQVQes+LQJLKwTplKitE5Bg/w1lWdvJWlnmRaGzxe3LqT67jotp0hXtDB8LAUiEPJTLIHzs5ct0FkgbPZ8Dgu/rnEZBqMRI7tqW3dAbu/fwMJEr2tBMIopxACkU69Tkg0+Qd+5yYClqP5h4fI6ZV5BmHd+kJASvQB9ORWbG7p1N+eEl2WX01nRKASNM2+eek9MeiRnymEbC+ePWCRtN/xHd/+IC2eVXu+Mv88bvPt+yHl4x0ODWmeDt6QN8MtafwBaUJVY4wEAAA=="
+   },
+   "Metadata": {
+    "aws:cdk:path": "EwdAss1Stack/CDKMetadata/Default"
+   },
+   "Condition": "CDKMetadataAvailable"
+  }
+ },
+ "Outputs": {
+  "RestAPIEndpointB14C3C54": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "RestAPI1CC12F26"
+      },
+      ".execute-api.",
+      {
+       "Ref": "AWS::Region"
+      },
+      ".",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "RestAPIDeploymentStagedev1DE74094"
+      },
+      "/"
+     ]
+    ]
+   }
+  }
+ },
+ "Conditions": {
+  "CDKMetadataAvailable": {
+   "Fn::Or": [
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "af-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ca-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-northwest-1"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-3"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "sa-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-2"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-west-2"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}
