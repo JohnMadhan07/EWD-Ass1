@@ -9,10 +9,10 @@ export const movieReviews: Review[] = [
     },
     {
         movieId: 1,
-        ReviewerName: "user1",
+        ReviewerName: "user3",
         ReviewDate: "2021-01-16",
         Content: "Okayish Movie!",
-        Rating: 5
+        Rating: 3
     },
     {
         movieId: 2,

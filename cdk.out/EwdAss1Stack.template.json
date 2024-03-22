@@ -698,7 +698,7 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "e0690592dd9efac22e9fedd9ad94ef31d0e6b404bbf9142b33bba636f8bd9287.zip"
+     "S3Key": "a02806462e0c40a0fcafd18e41faf3d927a184e7cbda038577eb8a7db09714b4.zip"
     },
     "Environment": {
      "Variables": {
@@ -726,7 +726,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "EwdAss1Stack/updatemoviereview/Resource",
-    "aws:asset:path": "asset.e0690592dd9efac22e9fedd9ad94ef31d0e6b404bbf9142b33bba636f8bd9287",
+    "aws:asset:path": "asset.a02806462e0c40a0fcafd18e41faf3d927a184e7cbda038577eb8a7db09714b4",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -2242,7 +2242,7 @@
        {
         "Ref": "MovieReviewsTable92783803"
        },
-       "\":[{\"PutRequest\":{\"Item\":{\"movieId\":{\"N\":\"1\"},\"ReviewerName\":{\"S\":\"user1\"},\"ReviewDate\":{\"S\":\"2023-01-15\"},\"Content\":{\"S\":\"This movie was amazing!\"},\"Rating\":{\"N\":\"5\"}}}},{\"PutRequest\":{\"Item\":{\"movieId\":{\"N\":\"1\"},\"ReviewerName\":{\"S\":\"user1\"},\"ReviewDate\":{\"S\":\"2021-01-16\"},\"Content\":{\"S\":\"Okayish Movie!\"},\"Rating\":{\"N\":\"5\"}}}},{\"PutRequest\":{\"Item\":{\"movieId\":{\"N\":\"2\"},\"ReviewerName\":{\"S\":\"user2\"},\"ReviewDate\":{\"S\":\"2023-02-20\"},\"Content\":{\"S\":\"Average movie, nothing special.\"},\"Rating\":{\"N\":\"3\"}}}},{\"PutRequest\":{\"Item\":{\"movieId\":{\"N\":\"3\"},\"ReviewerName\":{\"S\":\"user3\"},\"ReviewDate\":{\"S\":\"2023-03-25\"},\"Content\":{\"S\":\"Terrible acting, not worth watching.\"},\"Rating\":{\"N\":\"1\"}}}},{\"PutRequest\":{\"Item\":{\"movieId\":{\"N\":\"4\"},\"ReviewerName\":{\"S\":\"user4\"},\"ReviewDate\":{\"S\":\"2021-04-10\"},\"Content\":{\"S\":\"Enjoyed it, would recommend!\"},\"Rating\":{\"N\":\"4\"}}}},{\"PutRequest\":{\"Item\":{\"movieId\":{\"N\":\"5\"},\"ReviewerName\":{\"S\":\"user2\"},\"ReviewDate\":{\"S\":\"2020-05-05\"},\"Content\":{\"S\":\"Great storyline, but pacing was a bit slow.\"},\"Rating\":{\"N\":\"4\"}}}}]}},\"physicalResourceId\":{\"id\":\"moviereviewsddbInitData\"}}"
+       "\":[{\"PutRequest\":{\"Item\":{\"movieId\":{\"N\":\"1\"},\"ReviewerName\":{\"S\":\"user1\"},\"ReviewDate\":{\"S\":\"2023-01-15\"},\"Content\":{\"S\":\"This movie was amazing!\"},\"Rating\":{\"N\":\"5\"}}}},{\"PutRequest\":{\"Item\":{\"movieId\":{\"N\":\"1\"},\"ReviewerName\":{\"S\":\"user3\"},\"ReviewDate\":{\"S\":\"2021-01-16\"},\"Content\":{\"S\":\"Okayish Movie!\"},\"Rating\":{\"N\":\"3\"}}}},{\"PutRequest\":{\"Item\":{\"movieId\":{\"N\":\"2\"},\"ReviewerName\":{\"S\":\"user2\"},\"ReviewDate\":{\"S\":\"2023-02-20\"},\"Content\":{\"S\":\"Average movie, nothing special.\"},\"Rating\":{\"N\":\"3\"}}}},{\"PutRequest\":{\"Item\":{\"movieId\":{\"N\":\"3\"},\"ReviewerName\":{\"S\":\"user3\"},\"ReviewDate\":{\"S\":\"2023-03-25\"},\"Content\":{\"S\":\"Terrible acting, not worth watching.\"},\"Rating\":{\"N\":\"1\"}}}},{\"PutRequest\":{\"Item\":{\"movieId\":{\"N\":\"4\"},\"ReviewerName\":{\"S\":\"user4\"},\"ReviewDate\":{\"S\":\"2021-04-10\"},\"Content\":{\"S\":\"Enjoyed it, would recommend!\"},\"Rating\":{\"N\":\"4\"}}}},{\"PutRequest\":{\"Item\":{\"movieId\":{\"N\":\"5\"},\"ReviewerName\":{\"S\":\"user2\"},\"ReviewDate\":{\"S\":\"2020-05-05\"},\"Content\":{\"S\":\"Great storyline, but pacing was a bit slow.\"},\"Rating\":{\"N\":\"4\"}}}}]}},\"physicalResourceId\":{\"id\":\"moviereviewsddbInitData\"}}"
       ]
      ]
     },
